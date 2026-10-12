@@ -52,6 +52,15 @@ func NewGradeCalculator(modes ...GradeMode) *GradeCalculator {
 func (gc *GradeCalculator) GetFinalGrade() string {
 	numericalGrade := gc.calculateNumericalGrade()
 
+	// Handle Pass/Fail grading.
+	if gc.mode == PassFail {
+		if numericalGrade >= 70 {
+			return "Pass"
+		}
+		return "Fail"
+	}
+
+	// Handle traditional letter grading.
 	if numericalGrade >= 90 {
 		return "A"
 	} else if numericalGrade >= 80 {
