@@ -103,3 +103,34 @@ func TestGradeTypeString(t *testing.T) {
 		}
 	}
 }
+
+func TestPassFailMode(t *testing.T) {
+	tests := []struct {
+		name       string
+		assignment int
+		exam       int
+		essay      int
+		expected   string
+	}{
+		{"passing at 70", 70, 70, 70, "Pass"},
+		{"failing at 69", 69, 69, 69, "Fail"},
+		{"weighted passing grade", 80, 60, 70, "Pass"},
+		{"weighted failing grade", 60, 70, 80, "Fail"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			calculator := NewGradeCalculator(PassFail)
+
+			calculator.AddGrade("assignment", test.assignment, Assignment)
+			calculator.AddGrade("exam", test.exam, Exam)
+			calculator.AddGrade("essay", test.essay, Essay)
+
+			actual := calculator.GetFinalGrade()
+
+			if actual != test.expected {
+				t.Errorf("Expected %s, got %s", test.expected, actual)
+			}
+		})
+	}
+}
